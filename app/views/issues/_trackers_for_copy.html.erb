@@ -1,0 +1,15 @@
+<% if User.current.allowed_to?(:issues_coping, @project)   then %>
+
+<fieldset id="users" class="collapsible collapsed box" style="border-width: 1px 1px 1px 1px"><legend onclick="toggleFieldset(this);"><%= l(:field_tracker_for_copy_goupname) %></legend>
+<div style="display: none;">
+	<% project.users.each do |user| %>
+	    <label class="floating">
+	    <%= check_box_tag 'user_tr_copylist[]', user.id, nil, :id => nil %>
+	    <%=h user %>
+	    </label>
+	<% end %>
+	<%= hidden_field_tag 'user_tr_copylist[]' %>
+</div>
+</fieldset>	
+
+<% end %>
