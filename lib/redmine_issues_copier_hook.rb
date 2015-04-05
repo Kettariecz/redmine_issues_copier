@@ -31,16 +31,14 @@ class RedmineIssuesCopierHook < Redmine::Hook::ViewListener
 
   #Процедура копирует указанную задачу в один или несколько указанных трекеров, на основании выбранных пользователей.
   def coping_issue_by_userslist(issue, list)
+    list = list.reject{|e| e.empty?}
     list.each { |user_id|
-      if user_id.to_i > 0 then 
-        new_copy = Issue.new.copy_from(issue) #копируем задачу
-        new_copy.assigned_to_id = user_id.to_i
-        if Setting.plugin_redmine_issues_copier['tracker_for_user'][user_id.to_s].nil? == false then
-          new_copy.tracker_id=  Setting.plugin_redmine_issues_copier['tracker_for_user'][user_id.to_s]
-        end  
-        new_copy.custom_field_values = issue.custom_field_values.inject({}) {|h,v| h[v.custom_field_id] = v.value; h}
-        new_copy.save                   #сохраняем
-      end
+      t_id = Setting.plugin_redmine_issues_copier['tracker_for_user'][user_id.to_s].empty? ? issue.tracker_id : Setting.plugin_redmine_issues_copier['tracker_for_user'][user_id.to_s].to_i 
+      new_copy = Issue.new.copy_from(issue) #копируем задачу
+      new_copy.tracker_id =  t_id
+      new_copy.assigned_to_id = user_id.to_i
+      new_copy.custom_field_values = issue.custom_field_values.inject({}) {|h,v| h[v.custom_field_id] = v.value; h}
+      new_copy.save                   #сохраняем
     } 
   end
 

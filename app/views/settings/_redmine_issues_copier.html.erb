@@ -1,13 +1,13 @@
 <div>
 	<table>
 	<%  User.logged.status(1).each  do |t| %>
-		<tr>
-			<td><%= t.name%></td>
-			<% tracker = (Setting.plugin_redmine_issues_copier['tracker_for_user'].nil? ? nil : Setting.plugin_redmine_issues_copier['tracker_for_user']["#{t.id}"]) %>
-			<td><%= select_tag "settings[tracker_for_user][#{t.id}]", 
-							options_from_collection_for_select(Tracker.find(:all), "id", "name", tracker), 
-							{:include_blank => true} %></td>
-		</tr>
+	<tr>
+		<td><%= t.name%></td>
+		<% tracker = (Setting.plugin_redmine_issues_copier['tracker_for_user'].nil? ? nil : Setting.plugin_redmine_issues_copier['tracker_for_user']["#{t.id}"]) %>
+		<td><%= select_tag "settings[tracker_for_user][#{t.id}]", 
+						options_from_collection_for_select(Tracker.find(:all), "id", "name", tracker), 
+						{:include_blank => true} %></td>
+	</tr>
 	<% end %>
 	</table>		
 </div>
